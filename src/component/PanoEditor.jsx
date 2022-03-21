@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import TWEEN, * as PANOLENS from "../../node_modules/panolens/build/panolens";
+import * as PANOLENS from "../../node_modules/panolens/build/panolens";
 
 const PanoEditor = ({ panorama, viewer }) => {
+  const [infospots, setInfospots] = useState();
   let focus;
   const addTag = () => {
     const coordinate = viewer.outputPosition();
@@ -25,13 +26,12 @@ const PanoEditor = ({ panorama, viewer }) => {
     // const testDiv = newDiv;
     // infospot.addHoverElement(testDiv, 200);
 
+    // infospot.focus(1000, function (k) {
+    //   return k === 1 ? 1 : 1 - Math.pow(2, -10 * k);
+    // });
+    focus = infospot;
     panorama.add(infospot);
-
-    infospot.focus(1000, function (k) {
-      return k === 1 ? 1 : 1 - Math.pow(2, -10 * k);
-    });
-
-    console.log(infospot);
+    setInfospots(infospot);
   };
   return (
     <div
@@ -39,29 +39,35 @@ const PanoEditor = ({ panorama, viewer }) => {
       style={{ width: "600px", height: "200px", border: "1px solid black" }}
     >
       <button
-        onClick={() => {
-          panorama.addEventListener("click", addTag);
+        onClick={(e) => {
+          panorama.addEventListener("click", function handler() {
+            addTag();
+            this.removeEventListener("click", handler);
+          });
         }}
       >
-        tag 생성 활성화
+        tag 생성
       </button>
-      <button
+      {/* <button
         onClick={() => {
-          panorama.removeEventListener("click", addTag);
+          panorama.removeEventListener("click", () => {
+            addTag();
+          });
         }}
       >
         tag 생성 비활성화
       </button>
       <button
         onClick={() => {
-          console.log(focus);
-          focus.focus(1000, function (k) {
-            return k === 1 ? 1 : 1 - Math.pow(2, -10 * k);
-          });
+          console.log(infospots);
+          // console.log(focus);
+          // focus.focus(1000, function (k) {
+          //   return k === 1 ? 1 : 1 - Math.pow(2, -10 * k);
+          // });
         }}
       >
         focus test
-      </button>
+      </button> */}
     </div>
   );
 };
