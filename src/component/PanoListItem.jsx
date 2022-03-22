@@ -1,13 +1,18 @@
 import React from "react";
 
-const PanoListItem = ({ content }) => {
+const PanoListItem = ({ index, infospot, setCurrentInfospotIndex }) => {
   return (
     <div
       onClick={() => {
-        alert(content);
+        setCurrentInfospotIndex(index);
+        infospot.focus(1000, function (k) {
+          return k === 1 ? 1 : 1 - Math.pow(2, -10 * k);
+        });
+        console.log(infospot);
+        console.log(infospot.element.innerText);
       }}
     >
-      {content}
+      {infospot.element.innerText}
     </div>
   );
 };
